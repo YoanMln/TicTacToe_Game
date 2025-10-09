@@ -10,15 +10,41 @@ public class TicTacToe {
 
     public TicTacToe() {
         board = new Board();
-        player1 = new Player(" X ");
-        player2 = new Player(" O ");
         scanner = new Scanner(System.in);
+
+        System.out.println("Bienvenue dans TicTacToe !");
+        System.out.println("Choisissez le mode de jeu :");
+        System.out.println("1. Humain vs Humain");
+        System.out.println("2. Humain vs IA");
+        System.out.println("3. IA vs IA");
+        System.out.print("Votre choix : ");
+
+        int choice = Integer.parseInt(scanner.nextLine());
+
+        switch (choice) {
+            case 1 -> {
+                player1 = new Player(" X ", false);
+                player2 = new Player(" O ", false);
+            }
+            case 2 -> {
+                player1 = new Player(" X ", false);
+                player2 = new Player(" O ", true);
+            }
+            case 3 -> {
+                player1 = new Player(" X ", true);
+                player2 = new Player(" O ", true);
+            }
+            default -> {
+                System.out.println("Choix invalide, mode par défaut : Humain vs IA");
+                player1 = new Player(" X ", false);
+                player2 = new Player(" O ", true);
+            }
+        }
     }
 
     public void start() {
-        System.out.println("Bienvenue dans TicTacToe ");
-        System.out.println("Joueur 1 : X");
-        System.out.println("Joueur 2 : O");
+        System.out.println("Joueur 1 : " + player1.getRepresentation());
+        System.out.println("Joueur 2 : " + player2.getRepresentation());
         board.display();
         play();
     }
@@ -28,8 +54,8 @@ public class TicTacToe {
 
         while (!isOver()) {
             System.out.println("C'est au tour de " + currentPlayer.getRepresentation());
-            int[] move = getMove(currentPlayer);
-            setOwner(move[0], move[1], currentPlayer);
+            int[] move = currentPlayer.getMove(board); // 🔹 On utilise getMove() du Player
+            board.setOwner(move[0], move[1], currentPlayer);
             board.display();
 
             currentPlayer = (currentPlayer == player1) ? player2 : player1;
@@ -41,39 +67,6 @@ public class TicTacToe {
         } else {
             System.out.println("Match nul !");
         }
-    }
-
-    public int[] getMove(Player player) {
-        int row = -1;
-        int col = -1;
-        boolean validMove = false;
-
-        while (!validMove) {
-            try {
-                System.out.println(player.getRepresentation() + " à vous de jouer :");
-                System.out.print("Entrez la ligne (0-2) : ");
-                row = Integer.parseInt(scanner.nextLine());
-                System.out.print("Entrez la colonne (0-2) : ");
-                col = Integer.parseInt(scanner.nextLine());
-
-                if (row >= 0 && row < Board.SIZE && col >= 0 && col < Board.SIZE) {
-                    if (board.isCellEmpty(row, col)) {
-                        validMove = true;
-                    } else {
-                        System.out.println("Case déjà occupée. Réessayez !");
-                    }
-                } else {
-                    System.out.println("Coordonnées invalides, entrez des nombres entre 0 et 2.");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Veuillez entrer un nombre valide !");
-            }
-        }
-        return new int[]{row, col};
-    }
-
-    public void setOwner(int row, int col, Player player) {
-        board.setOwner(row, col, player);
     }
 
     public boolean isOver() {
@@ -99,12 +92,13 @@ public class TicTacToe {
             }
         }
 
-        // Vérifie diagonales
+        // Vérifie les diagonales
         if (!board.getCell(0, 0).getRepresentation().equals("   ") &&
                 board.getCell(0, 0).getRepresentation().equals(board.getCell(1, 1).getRepresentation()) &&
                 board.getCell(0, 0).getRepresentation().equals(board.getCell(2, 2).getRepresentation())) {
             return board.getCell(0, 0).getRepresentation().equals(player1.getRepresentation()) ? player1 : player2;
         }
+
         if (!board.getCell(0, 2).getRepresentation().equals("   ") &&
                 board.getCell(0, 2).getRepresentation().equals(board.getCell(1, 1).getRepresentation()) &&
                 board.getCell(0, 2).getRepresentation().equals(board.getCell(2, 0).getRepresentation())) {
