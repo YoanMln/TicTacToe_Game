@@ -1,4 +1,4 @@
-package TicTacToe;
+package core;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -26,7 +26,6 @@ public class Player {
         int row = -1, col = -1;
 
         if (isArtificial) {
-
             do {
                 row = random.nextInt(Board.SIZE);
                 col = random.nextInt(Board.SIZE);
@@ -34,7 +33,6 @@ public class Player {
 
             System.out.println(getRepresentation() + " (IA) joue en (" + row + "," + col + ")");
         } else {
-
             boolean validMove = false;
 
             while (!validMove) {
@@ -55,7 +53,7 @@ public class Player {
                         System.out.println("Coordonnées invalides !");
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println(" Entrez un nombre valide !");
+                    System.out.println("Entrez un nombre valide !");
                 }
             }
         }

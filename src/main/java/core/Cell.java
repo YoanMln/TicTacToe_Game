@@ -1,4 +1,4 @@
-package TicTacToe;
+package core;
 
 public class Cell {
     private String representation;

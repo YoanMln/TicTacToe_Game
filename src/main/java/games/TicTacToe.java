@@ -1,15 +1,22 @@
-package TicTacToe;
+package games;
 
+import core.Game;
+import core.Board;
+import core.Player;
+import core.View;
+import core.UserInteraction;
 import java.util.Scanner;
 
-public class TicTacToe {
+public class TicTacToe extends Game {
     private Board board;
     private Player player1;
     private Player player2;
     private Scanner scanner;
+    private View view;
 
     public TicTacToe() {
         board = new Board();
+        view = new View();
         scanner = new Scanner(System.in);
 
         System.out.println("Bienvenue dans TicTacToe !");
@@ -43,9 +50,10 @@ public class TicTacToe {
     }
 
     public void start() {
-        System.out.println("Joueur 1 : " + player1.getRepresentation());
-        System.out.println("Joueur 2 : " + player2.getRepresentation());
-        board.display();
+        view.showMessage("Bienvenue dans TicTacToe !");
+        view.showMessage("Joueur 1 : " + player1.getRepresentation());
+        view.showMessage("Joueur 2 : " + player2.getRepresentation());
+        view.showBoard(board);
         play();
     }
 
@@ -53,19 +61,19 @@ public class TicTacToe {
         Player currentPlayer = player1;
 
         while (!isOver()) {
-            System.out.println("C'est au tour de " + currentPlayer.getRepresentation());
-            int[] move = currentPlayer.getMove(board); // 🔹 On utilise getMove() du Player
+            view.showTurn(currentPlayer);
+            int[] move = currentPlayer.getMove(board);
             board.setOwner(move[0], move[1], currentPlayer);
-            board.display();
+            view.showBoard(board);
 
             currentPlayer = (currentPlayer == player1) ? player2 : player1;
         }
 
         Player winner = getWinner();
         if (winner != null) {
-            System.out.println(winner.getRepresentation() + " a gagné !");
+            view.showVictory(winner);
         } else {
-            System.out.println("Match nul !");
+            view.showDraw();
         }
     }
 
@@ -74,7 +82,6 @@ public class TicTacToe {
     }
 
     public Player getWinner() {
-        // Vérifie les lignes
         for (int i = 0; i < Board.SIZE; i++) {
             if (!board.getCell(i, 0).getRepresentation().equals("   ") &&
                     board.getCell(i, 0).getRepresentation().equals(board.getCell(i, 1).getRepresentation()) &&
@@ -83,7 +90,6 @@ public class TicTacToe {
             }
         }
 
-        // Vérifie les colonnes
         for (int j = 0; j < Board.SIZE; j++) {
             if (!board.getCell(0, j).getRepresentation().equals("   ") &&
                     board.getCell(0, j).getRepresentation().equals(board.getCell(1, j).getRepresentation()) &&
@@ -92,7 +98,6 @@ public class TicTacToe {
             }
         }
 
-        // Vérifie les diagonales
         if (!board.getCell(0, 0).getRepresentation().equals("   ") &&
                 board.getCell(0, 0).getRepresentation().equals(board.getCell(1, 1).getRepresentation()) &&
                 board.getCell(0, 0).getRepresentation().equals(board.getCell(2, 2).getRepresentation())) {
