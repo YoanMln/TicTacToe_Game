@@ -1,4 +1,5 @@
 import games.TicTacToe;
+import games.Puissance4;
 import core.Game;
 import java.util.Scanner;
 
@@ -15,7 +16,7 @@ public class Main {
 
         switch (choix) {
             case 1 -> game = new TicTacToe();
-            case 2 -> System.out.println("Puissance 4 non encore implémenté");
+            case 2 -> game = new Puissance4();
             case 3 -> System.out.println("Morpion non encore implémenté");
             default -> System.out.println("Choix invalide");
         }

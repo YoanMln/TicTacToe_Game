@@ -1,16 +1,22 @@
 package core;
-import core.Cell;
-import core.Player;
 
 public class Board {
-    public static final int SIZE = 3;
-
+    private int rows;
+    private int cols;
     private Cell[][] board;
 
+    public static final int SIZE = 3; // pour TicTacToe
+
     public Board() {
-        board = new Cell[SIZE][SIZE];
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        this(3, 3);
+    }
+
+    public Board(int rows, int cols) {
+        this.rows = rows;
+        this.cols = cols;
+        board = new Cell[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 board[i][j] = new Cell();
             }
         }
@@ -29,8 +35,8 @@ public class Board {
     }
 
     public boolean isFull() {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 if (board[i][j].isEmpty()) {
                     return false;
                 }
@@ -41,5 +47,17 @@ public class Board {
 
     public String getCellRepresentation(int row, int col) {
         return board[row][col].getRepresentation();
+    }
+
+    public boolean isColumnFull(int col) {
+        return !isCellEmpty(0, col);
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getCols() {
+        return cols;
     }
 }

@@ -6,16 +6,23 @@ public class View {
     }
 
     public void showBoard(Board board) {
-        System.out.println("---------------------");
-        for (int i = 0; i < Board.SIZE; i++) {
-            System.out.print(" | ");
-            for (int j = 0; j < Board.SIZE; j++) {
+        System.out.println("---------------------------------------------");
+        for (int i = 0; i < board.getRows(); i++) {
+            System.out.print("| ");
+            for (int j = 0; j < board.getCols(); j++) {
                 System.out.print(board.getCellRepresentation(i, j));
                 System.out.print(" | ");
             }
             System.out.println();
-            System.out.println("---------------------");
+            System.out.println("---------------------------------------------");
         }
+
+
+        System.out.print("  ");
+        for (int j = 0; j < board.getCols(); j++) {
+            System.out.print(" " + j + "  ");
+        }
+        System.out.println();
     }
 
     public void showTurn(Player player) {
