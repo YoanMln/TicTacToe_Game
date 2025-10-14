@@ -1,23 +1,32 @@
-import games.TicTacToe;
+
+
+import games.TicTacToe.controller.TicTacToeController;
 import games.Puissance4;
+import games.Gomoku;
 import core.Game;
+
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Choisissez un jeu :");
+        System.out.println("=== Choisissez un jeu ===");
         System.out.println("1. TicTacToe");
         System.out.println("2. Puissance 4");
-        System.out.println("3. Morpion");
+        System.out.println("3. Gomoku");
+        System.out.print("Votre choix : ");
 
         int choix = Integer.parseInt(scanner.nextLine());
         Game game = null;
 
         switch (choix) {
-            case 1 -> game = new TicTacToe();
+            case 1 -> {
+                TicTacToeController controller = new TicTacToeController();
+                controller.start(); // Le contrôleur gère tout le flux MVC
+                return; // on quitte après avoir lancé le jeu
+            }
             case 2 -> game = new Puissance4();
-            case 3 -> System.out.println("Morpion non encore implémenté");
+            case 3 -> game = new Gomoku();
             default -> System.out.println("Choix invalide");
         }
 

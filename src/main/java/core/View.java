@@ -6,7 +6,8 @@ public class View {
     }
 
     public void showBoard(Board board) {
-        System.out.println("---------------------------------------------");
+        String separator = "-".repeat(board.getCols() * 4 + 1);
+        System.out.println(separator);
         for (int i = 0; i < board.getRows(); i++) {
             System.out.print("| ");
             for (int j = 0; j < board.getCols(); j++) {
@@ -14,13 +15,12 @@ public class View {
                 System.out.print(" | ");
             }
             System.out.println();
-            System.out.println("---------------------------------------------");
+            System.out.println(separator);
         }
-
 
         System.out.print("  ");
         for (int j = 0; j < board.getCols(); j++) {
-            System.out.print(" " + j + "  ");
+            System.out.printf(" %2d ", j);
         }
         System.out.println();
     }
