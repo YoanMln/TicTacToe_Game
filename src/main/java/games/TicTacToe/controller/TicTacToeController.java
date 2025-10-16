@@ -1,21 +1,32 @@
 package games.TicTacToe.controller;
 
+import core.Board;
 import core.Player;
 import games.TicTacToe.model.TicTacToe;
 import games.TicTacToe.view.ViewTicTacToe;
+import games.controller.GameController;
 
-public class TicTacToeController {
+public class TicTacToeController extends GameController {
 
-    private TicTacToe model;
-    private ViewTicTacToe view;
+    private final TicTacToe model;
+    private final ViewTicTacToe ticTacToeView;
 
     public TicTacToeController() {
-        view = new ViewTicTacToe();
-        view.showWelcome();
-
-        int choice = view.getModeChoice();
+        super(initializePlayers()[0], initializePlayers()[1], new Board(3, 3), new ViewTicTacToe());
+        
+        this.ticTacToeView = (ViewTicTacToe) this.view;
+        this.model = new TicTacToe(this.player1, this.player2);
+        
+       
+        this.ticTacToeView.showWelcome();
+    }
+    
+    private static Player[] initializePlayers() {
+        ViewTicTacToe tempView = new ViewTicTacToe();
+        tempView.showWelcome();
+        int choice = tempView.getModeChoice();
+        
         Player p1, p2;
-
         switch (choice) {
             case 1 -> {
                 p1 = new Player(" X ", false);
@@ -30,43 +41,63 @@ public class TicTacToeController {
                 p2 = new Player(" O ", true);
             }
             default -> {
-                System.out.println("Choix invalide, mode par défaut : Humain vs IA");
+                System.out.println("Choix invalide, mode par défaut : Joueur vs IA");
                 p1 = new Player(" X ", false);
                 p2 = new Player(" O ", true);
             }
         }
-
-        model = new TicTacToe(p1, p2);
+        return new Player[]{p1, p2};
     }
 
-    public void start() {
-        while (!model.isOver()) {
+    @Override
+    public void startGame() {
+        while (!isOver()) {
+
             view.showBoard(model.getBoard());
 
-            Player current = model.getCurrentPlayer();
             int[] move;
-
+            Player current = model.getCurrentPlayer();
             if (current.isArtificial()) {
                 move = current.getMove(model.getBoard());
             } else {
-                move = view.askMove(current, model.getBoard());
+                move = ticTacToeView.askMove(current, model.getBoard());
             }
 
-            boolean valid = model.playMove(move[0], move[1]);
-            if (!valid) {
-                view.showInvalidMove();
+            if (!playMove(move[0], move[1])) {
+                ticTacToeView.showInvalidMove();
                 continue;
             }
 
-            model.switchPlayer();
+            switchPlayer();
         }
+
 
         view.showBoard(model.getBoard());
 
-        if (model.getWinner() != null) {
-            view.showWinner(model.getWinner());
+        if (getWinner() != null) {
+            ticTacToeView.showWinner(getWinner());
         } else {
-            view.showDraw();
+            ticTacToeView.showDraw();
         }
+    }
+
+    @Override
+    public boolean playMove(int row, int col) {
+        return model.playMove(row, col);
+    }
+
+    @Override
+    public boolean isOver() {
+        return model.isOver();
+    }
+
+    @Override
+    public Player getWinner() {
+        return model.getWinner();
+    }
+
+    @Override
+    public void switchPlayer() {
+        model.switchPlayer();
     }
 }

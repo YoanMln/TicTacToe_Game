@@ -22,8 +22,8 @@ public class Main {
         switch (choix) {
             case 1 -> {
                 TicTacToeController controller = new TicTacToeController();
-                controller.start(); // Le contrôleur gère tout le flux MVC
-                return; // on quitte après avoir lancé le jeu
+                controller.startGame();
+                return;
             }
             case 2 -> game = new Puissance4();
             case 3 -> game = new Gomoku();

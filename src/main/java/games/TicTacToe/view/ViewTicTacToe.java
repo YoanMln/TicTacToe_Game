@@ -2,10 +2,11 @@ package games.TicTacToe.view;
 
 import core.Board;
 import core.Player;
+import core.View;
 
 import java.util.Scanner;
 
-public class ViewTicTacToe {
+public class ViewTicTacToe extends View {
 
     private final Scanner scanner = new Scanner(System.in);
 
@@ -22,6 +23,7 @@ public class ViewTicTacToe {
         return Integer.parseInt(scanner.nextLine());
     }
 
+    @Override
     public void showBoard(Board board) {
         for (int i = 0; i < board.getRows(); i++) {
             for (int j = 0; j < board.getCols(); j++) {
