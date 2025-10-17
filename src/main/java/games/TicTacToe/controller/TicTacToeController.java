@@ -24,7 +24,15 @@ public class TicTacToeController extends GameController {
     private static Player[] initializePlayers() {
         ViewTicTacToe tempView = new ViewTicTacToe();
         tempView.showWelcome();
-        int choice = tempView.getModeChoice();
+        
+        int choice = 2; 
+        
+        try {
+            choice = tempView.getModeChoice();
+        } catch (Exception e) {
+            System.out.println("❌ Erreur lors de la sélection du mode : " + e.getMessage());
+            System.out.println("🔄 Utilisation du mode par défaut : Joueur vs IA");
+        }
         
         Player p1, p2;
         switch (choice) {
@@ -41,7 +49,7 @@ public class TicTacToeController extends GameController {
                 p2 = new Player(" O ", true);
             }
             default -> {
-                System.out.println("Choix invalide, mode par défaut : Joueur vs IA");
+                System.out.println("🔄 Choix invalide, mode par défaut : Joueur vs IA");
                 p1 = new Player(" X ", false);
                 p2 = new Player(" O ", true);
             }
@@ -51,33 +59,45 @@ public class TicTacToeController extends GameController {
 
     @Override
     public void startGame() {
-        while (!isOver()) {
+        try {
+            while (!isOver()) {
+                view.showBoard(model.getBoard());
 
+                int[] move;
+                Player current = model.getCurrentPlayer();
+                
+                if (current.isArtificial()) {
+                    move = current.getMove(model.getBoard());
+                } else {
+                    move = ticTacToeView.askMove(current, model.getBoard());
+                }
+
+                
+                if (move[0] == -1 || move[1] == -1) {
+                    ticTacToeView.showInvalidMove();
+                    continue;
+                }
+
+                if (!playMove(move[0], move[1])) {
+                    ticTacToeView.showInvalidMove();
+                    continue;
+                }
+
+                switchPlayer();
+            }
+
+            
             view.showBoard(model.getBoard());
 
-            int[] move;
-            Player current = model.getCurrentPlayer();
-            if (current.isArtificial()) {
-                move = current.getMove(model.getBoard());
+            if (getWinner() != null) {
+                ticTacToeView.showWinner(getWinner());
             } else {
-                move = ticTacToeView.askMove(current, model.getBoard());
+                ticTacToeView.showDraw();
             }
-
-            if (!playMove(move[0], move[1])) {
-                ticTacToeView.showInvalidMove();
-                continue;
-            }
-
-            switchPlayer();
-        }
-
-
-        view.showBoard(model.getBoard());
-
-        if (getWinner() != null) {
-            ticTacToeView.showWinner(getWinner());
-        } else {
-            ticTacToeView.showDraw();
+            
+        } catch (Exception e) {
+            System.out.println("❌ Erreur critique pendant le jeu : " + e.getMessage());
+            System.out.println("🔄 Le jeu va se terminer.");
         }
     }
 

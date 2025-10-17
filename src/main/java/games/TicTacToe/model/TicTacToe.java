@@ -11,6 +11,11 @@ public class TicTacToe {
     private Player currentPlayer;
 
     public TicTacToe(Player p1, Player p2) {
+       
+        if (p1 == null || p2 == null) {
+            throw new IllegalArgumentException("❌ Les joueurs ne peuvent pas être null (p1: " + p1 + ", p2: " + p2 + ")");
+        }
+        
         this.player1 = p1;
         this.player2 = p2;
         this.currentPlayer = player1;
@@ -30,7 +35,7 @@ public class TicTacToe {
     }
 
     public Player getWinner() {
-        // Vérification des lignes
+       
         for (int i = 0; i < Board.SIZE; i++) {
             if (!board.getCellRepresentation(i, 0).equals("   ") &&
                     board.getCellRepresentation(i, 0).equals(board.getCellRepresentation(i, 1)) &&
@@ -39,7 +44,7 @@ public class TicTacToe {
             }
         }
 
-        // Vérification des colonnes
+       
         for (int j = 0; j < Board.SIZE; j++) {
             if (!board.getCellRepresentation(0, j).equals("   ") &&
                     board.getCellRepresentation(0, j).equals(board.getCellRepresentation(1, j)) &&
@@ -48,7 +53,7 @@ public class TicTacToe {
             }
         }
 
-        // Diagonales
+       
         if (!board.getCellRepresentation(0, 0).equals("   ") &&
                 board.getCellRepresentation(0, 0).equals(board.getCellRepresentation(1, 1)) &&
                 board.getCellRepresentation(0, 0).equals(board.getCellRepresentation(2, 2))) {
@@ -65,9 +70,17 @@ public class TicTacToe {
     }
 
     public boolean playMove(int row, int col) {
-        if (!board.isCellEmpty(row, col)) return false;
-        board.setOwner(row, col, currentPlayer);
-        return true;
+        
+        try {
+            if (!board.isCellEmpty(row, col)) {
+                return false;
+            }
+            board.setOwner(row, col, currentPlayer);
+            return true; 
+        } catch (IllegalArgumentException e) {
+            System.out.println("❌ Coup invalide : " + e.getMessage());
+            return false; 
+        }
     }
 
     public void switchPlayer() {
