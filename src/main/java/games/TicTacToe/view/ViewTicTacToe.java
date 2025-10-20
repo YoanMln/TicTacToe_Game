@@ -65,13 +65,24 @@ public class ViewTicTacToe extends View {
             return;
         }
         
+        // Affichage des numéros de colonnes
+        System.out.println("\n    0   1   2");
+        System.out.println("  ┌───┬───┬───┐");
+        
         for (int i = 0; i < board.getRows(); i++) {
+            // Affichage du numéro de ligne
+            System.out.print(i + " │");
             for (int j = 0; j < board.getCols(); j++) {
                 String cell = board.getCellRepresentation(i, j);
                 System.out.print(cell.equals("   ") ? " . " : cell);
+                System.out.print("│");
             }
             System.out.println();
+            if (i < board.getRows() - 1) {
+                System.out.println("  ├───┼───┼───┤");
+            }
         }
+        System.out.println("  └───┴───┴───┘");
     }
 
     /**
