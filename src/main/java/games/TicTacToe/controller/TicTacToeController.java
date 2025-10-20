@@ -17,15 +17,20 @@ public class TicTacToeController extends GameController {
 
     /**
      * Constructeur qui initialise le contrôleur TicTacToe.
-     * Configure les joueurs, le plateau et la vue, puis affiche le message de bienvenue.
+     * Configure les joueurs, le plateau et la vue.
      */
     public TicTacToeController() {
-        super(initializePlayers()[0], initializePlayers()[1], new Board(3, 3), new ViewTicTacToe());
+        this(initializePlayers());
+    }
+    
+    /**
+     * Constructeur privé pour éviter les appels multiples à initializePlayers().
+     */
+    private TicTacToeController(Player[] players) {
+        super(players[0], players[1], new Board(3, 3), new ViewTicTacToe());
         
         this.ticTacToeView = (ViewTicTacToe) this.view;
         this.model = new TicTacToe(this.player1, this.player2);
-        
-        this.ticTacToeView.showWelcome();
     }
     
     /**
